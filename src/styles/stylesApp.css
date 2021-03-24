@@ -1,0 +1,21 @@
+
+
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+.modal {
+    overflow-y: hidden;
+}
+
+.modal-footer {
+    margin-bottom: 12px;
+}
+
+.divider{
+    width:5px;
+    height:auto;
+    display:inline-block;
+}
