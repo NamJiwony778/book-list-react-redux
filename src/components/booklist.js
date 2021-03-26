@@ -1,44 +1,59 @@
-import React from "react";
+import React,  { useState } from "react";
 import "materialize-css/dist/css/materialize.min.css";
 import Modal from "./modal";
 import { connect, useDispatch } from "react-redux";
 import '../styles/stylesApp.css';
 import  { deleteBook }  from '../redux/actions';
 
-
-let array = [];
-
 function BookList (booksList) {
-  array = booksList.booklist.booksArray;
-  console.log("books in booksList component:  " + JSON.stringify(array));
+  let array = booksList.booklist.booksArray;
   const dispatch = useDispatch();
 
-function removeBook (id) {
-  
+  let selectedBook
+  let updatedBook;
 
-   console.log( "ID " + id)
-  let selectedBook;
-  array.some(function(obj) {
-    if (obj.id === id) {
-      selectedBook = obj;
-    }
-  })
+  const [nameValue, setNameValue] = useState();
+  const [priceValue, setPriceValue] = useState();
+  const [categoryValue, setCategoryValue] = useState();
+  const [idValue, setIdValue] = useState();
+
+  function  getChosenToUpdateBook(id) {
+    array.some(function(obj) {
+     if (obj.id === id) {
+       updatedBook = obj;
+     }
+   })
+   console.log("update" + JSON.stringify(updatedBook));
+   
+   setNameValue(updatedBook.name);
+   setPriceValue(updatedBook.price);
+   setCategoryValue(updatedBook.category);
+   setIdValue(updatedBook.id);
+   
  
-  console.log("book to delete " + JSON.stringify(selectedBook))
+   return updatedBook;
+ }
 
 
-  if (selectedBook) {
-    dispatch(deleteBook(selectedBook))
-  } else {
-      console.log("There is no book");
+
+  function removeBook (id) {
+    array.some(function(obj) {
+      if (obj.id === id) {
+        selectedBook = obj;
+      }
+    })
+  
+    if (selectedBook) {
+      dispatch(deleteBook(selectedBook))
+    } else {
+        console.log("There is no book");
+    }
+
   }
-
-}
 
     return (
         <div>
-          <Modal />
-
+          <Modal idValue={idValue} nameValue={nameValue} priceValue={priceValue} categoryValue={categoryValue}/>
           <table className="centered highlight">
             <thead>
               <tr>
@@ -54,7 +69,7 @@ function removeBook (id) {
                 <td>{item.name}</td>
                 <td>{item.price}</td>
                 <td>{item.category}</td>
-                <td><a className="waves-effect  waves-light btn-small" id={item.id} onClick={<Modal/>}>Update</a> 
+                <td><a className="waves-effect waves-light btn-small modal-trigger" onClick={(e) => e = getChosenToUpdateBook(item.id)}  id={item.id} data-target="modal2">Update</a> 
                 <div className="divider"/>
                 <a className="waves-effect red waves-light btn-small" id={item.id} onClick={(e) => e = removeBook(item.id)}>Delete</a></td>
                 </tr>);

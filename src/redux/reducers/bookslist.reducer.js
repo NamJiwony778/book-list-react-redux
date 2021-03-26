@@ -1,4 +1,4 @@
-import { ADD_BOOK, DELETE_BOOK } from '../types';
+import { ADD_BOOK, DELETE_BOOK, UPDATE_BOOK } from '../types';
 
 
 // const initialState = {booksArray: [{id: 0, name: 'Lord of the flies', price: 12.00, category: 'dystopian'}]};
@@ -22,12 +22,37 @@ export default function(state = initialState, action) {
                 ...state, 
                 booksArray: [ ...state.booksArray, {id: nextBookId(state.booksArray),
                 name: action.payload.name, price: action.payload.price, category: action.payload.category}]  }
+    
+        case UPDATE_BOOK: 
+        const index = action.payload.id;
+        console.log('action.payload '+ JSON.stringify(action.payload));
+        let booksArr =  ([ ...state.booksArray]);
+        console.log('booksArr '+ JSON.stringify(booksArr));
+        if (action.payload.name !== '') {
+            booksArr[index].name = action.payload.name
+
+        } else {
+            booksArr[index].name =  booksArr[index].name
+        }
+        if (action.payload.price > 0 ) {
+            booksArr[index].price = action.payload.price
+
+        } else {
+            booksArr[index].price = booksArr[index].price
+        }
+        if (action.payload.category !== '') {
+            booksArr[index].category = action.payload.category
+
+        } else {
+            booksArr[index].category = booksArr[index].category
+        }
+             return {
+                ...state,
+                booksArray: booksArr }    
             
         case DELETE_BOOK:
-            console.log('3 '+ action.type);
             let books =  ([ ...state.booksArray])
             let newBooksArr = books.filter(book => book !== action.payload);
-          console.log("newBooksArr " + JSON.stringify(newBooksArr));
             return {
                  ...state, 
                  booksArray: newBooksArr
